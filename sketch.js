@@ -29,30 +29,52 @@ function addStreamElement(){
       newLevel -= 1;
     }
     newLevel = mod(newLevel, numStreams);
-    console.log(newLevel);
     streams.push(newLevel);
   }
 }
 
 let buttonOne = "a"
 let buttonTwo = "s"
-var oscillator;
 
 var numStreams = 4;
 var onStream = 0;
 var streams = [];
+var lastStream = 0;
+var misses = 0;
+
+var lastHit = 0;
+let tolerance = 150;
 
 function onButtonOne(){
   onStream = mod((onStream - 1), numStreams);
+  lastHit = (+ new Date());
 }
 
 function onButtonTwo(){
   onStream = mod((onStream + 1), numStreams);
+  lastHit = (+ new Date());
+}
+
+function checkForLate(){
+  var newTime = (+ new Date());
+  console.log(lastHit - newTime);
+  if (lastHit - newTime <= -tolerance ||
+      onStream != lastStream){
+    misses++;
+    console.log(misses);
+    document.getElementById("misses").innerText = misses;
+  }
 }
 
 /* 120 bpm */
 let msDelay = 500;
 function onBeat() {
+  var newTime = (+ new Date());
+  if (newTime - lastHit >= tolerance ||
+      onStream != streams[0]){
+        lastStream = streams[0];
+        setTimeout(checkForLate, tolerance);    
+  }
   if (snare != null){
     snare.play();
   }
