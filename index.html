@@ -10,6 +10,16 @@
     <script src="sketch.js"></script>
   </head>
   <body>
-    Misses: <p id="misses">0</p>
+    <center>
+      <div>
+        Misses: <h2 style="color: red" id="misses">0</h2>
+        Hits: <h2 style="color: green" id="hits">0</h2>
+      </div>
+      <div>
+        Channels: <input type="number" value="4" id="numChannels" onchange="changeChannels()"></input>
+        <br />
+        BPM: <input type="number" value="120" id="bpm" onchange="changeBPM()"></input>
+      </div>
+    </center>
   </body>
 </html>

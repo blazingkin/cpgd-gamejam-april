@@ -3,13 +3,26 @@ function preload(){
   snare = loadSound('snare.ogg');
 }
 
+function changeChannels(){
+  numStreams = document.getElementById('numChannels').value;
+  console.log("numStreams: "+numStreams);
+  onStream = 0;
+}
+
+function changeBPM(){
+  msDelay = (60 * 1000) / document.getElementById('bpm').value;
+  console.log("new delay: "+msDelay);
+}
+
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(windowWidth, windowHeight * (2/3));
   stroke(0,0,0,0);
   snare.setVolume(0.1);
   for (var i = 0; i <= width / blockWidth; i++){
     addStreamElement();
   }
+  changeChannels();
+  changeBPM();
 }
 
 var snare = null;
@@ -41,6 +54,7 @@ var onStream = 0;
 var streams = [];
 var lastStream = 0;
 var misses = 0;
+var hits = 0;
 
 var lastHit = 0;
 let tolerance = 150;
@@ -57,12 +71,13 @@ function onButtonTwo(){
 
 function checkForLate(){
   var newTime = (+ new Date());
-  console.log(lastHit - newTime);
   if (lastHit - newTime <= -tolerance ||
       onStream != lastStream){
     misses++;
-    console.log(misses);
     document.getElementById("misses").innerText = misses;
+  }else{
+    hits++;
+    document.getElementById('hits').innerText = hits;
   }
 }
 
@@ -74,6 +89,9 @@ function onBeat() {
       onStream != streams[0]){
         lastStream = streams[0];
         setTimeout(checkForLate, tolerance);    
+  }else{
+    hits++;
+    document.getElementById('hits').innerText = hits;
   }
   if (snare != null){
     snare.play();
